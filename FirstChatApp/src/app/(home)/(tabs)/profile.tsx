@@ -12,6 +12,7 @@ export default function Account() {
 
   const [loading, setLoading] = useState(true)
   const [username, setUsername] = useState('')
+  const [fullname, setFullname] = useState('')
   const [website, setWebsite] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
 
@@ -26,7 +27,7 @@ export default function Account() {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`username, website, avatar_url`)
+        .select(`username, website, avatar_url, full_name`)
         .eq('id', session?.user.id)
         .single()
       if (error && status !== 406) {
@@ -37,6 +38,7 @@ export default function Account() {
         setUsername(data.username)
         setWebsite(data.website)
         setAvatarUrl(data.avatar_url)
+        setFullname(data.full_name)
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -51,10 +53,12 @@ export default function Account() {
     username,
     website,
     avatar_url,
+    full_name,
   }: {
     username: string
     website: string
     avatar_url: string
+    full_name: string
   }) {
     try {
       setLoading(true)
@@ -65,6 +69,7 @@ export default function Account() {
         username,
         website,
         avatar_url,
+        full_name,
         updated_at: new Date(),
       }
 
@@ -88,6 +93,9 @@ export default function Account() {
         <Input label="Email" value={session?.user?.email} disabled />
       </View>
       <View style={styles.verticallySpaced}>
+        <Input label="Fullname" value={fullname || ''} onChangeText={(text) => setFullname(text)} />
+      </View>
+      <View style={styles.verticallySpaced}>
         <Input label="Username" value={username || ''} onChangeText={(text) => setUsername(text)} />
       </View>
       <View style={styles.verticallySpaced}>
@@ -97,7 +105,7 @@ export default function Account() {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
           title={loading ? 'Loading ...' : 'Update'}
-          onPress={() => updateProfile({ username, website, avatar_url: avatarUrl })}
+          onPress={() => updateProfile({ username, website, avatar_url: avatarUrl, full_name: fullname })}
           disabled={loading}
         />
       </View>
