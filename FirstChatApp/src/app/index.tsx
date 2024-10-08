@@ -5,7 +5,7 @@ import {StyleSheet, Text, View} from "react-native";
 //will render to a redirect
 export default function App() {
     return(
-        <Redirect href={"/(home)/(tabs)/"} />
+        <Redirect href={"/(auth)/login/"} />
         // <View style={styles.container}>
         //     <Text>Hello World</Text>
         //     <StatusBar style="auto" />
