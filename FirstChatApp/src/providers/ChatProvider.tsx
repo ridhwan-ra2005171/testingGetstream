@@ -3,6 +3,8 @@ import { StreamChat } from 'stream-chat';
 import { PropsWithChildren, useEffect, useState } from "react";
 import { OverlayProvider, Chat } from "stream-chat-expo";
 import { ActivityIndicator } from 'react-native';
+import { useAuth } from './AuthProvider';
+import { supabase } from '../lib/supabase';
 
 
 const client = StreamChat.getInstance(process.env.EXPO_PUBLIC_STREAM_API_KEY ?? '');//from getstream dashboard
@@ -11,18 +13,23 @@ export default function ChatProvider({ children }: PropsWithChildren) {
 
     //want to render only when user is connected
     const [isReady, setIsReady] = useState(false);
+   
 
+    //we can grab the user + profile now
+    const {profile} = useAuth();
 
     useEffect(() => {
+        if(!profile) return; //if there is no profile, return
+
         const connect = async () => {
             await client.connectUser(
                 {
-                    id: 'jlahey',
-                    name: 'Jim Lahey',
-                    image: 'https://i.imgur.com/fR9Jz14.png',
+                    id: profile.id,
+                    name: profile.full_name,
+                    image: supabase.storage.from('avatars').getPublicUrl(profile.avatar_url).data.publicUrl,
                 },
                 // 'user_token', //i disabled it in my dashboard
-                client.devToken('jlahey')//developer token
+                client.devToken(profile.id)//developer token
             );
             setIsReady(true);
             //creating channel using channel id [run it once only]
@@ -35,10 +42,14 @@ export default function ChatProvider({ children }: PropsWithChildren) {
 
         //clean up function to clear connection
         return () => {
-            client.disconnectUser();
+            //disconnect only when client is connected
+            if (isReady){
+                client.disconnectUser();
+            }
+            
             setIsReady(false);
         };
-    }, []);
+    }, [profile?.id]); //only when profile changes
 
     if (!isReady) {
         return <ActivityIndicator/>//keeps loading
