@@ -24,12 +24,14 @@ export default function MainTabScreen() {
                     )
                 }} />
 
+            {/* //render list of channels */}
             <ChannelList
                 filters={{ members: { $in: [user?.id ?? ''] } }}
-                onSelect={(channel) => router.push(`/channel/${channel.cid}`)}
+                onSelect={(channel) => router.push(`/channel/${channel.cid}` )}
             />
+            
             {/* //get the channel, go to the channel cid(completeID from getstream) */}
         </>
-
+        
     )
 }

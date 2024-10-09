@@ -18,6 +18,7 @@ export default function ChatProvider({ children }: PropsWithChildren) {
     //we can grab the user + profile now
     const {profile} = useAuth();
 
+    //getting profile from supabase and the connecting client to the getstream, used client.devToken
     useEffect(() => {
         if(!profile) return; //if there is no profile, return
 
@@ -51,6 +52,7 @@ export default function ChatProvider({ children }: PropsWithChildren) {
         };
     }, [profile?.id]); //only when profile changes
 
+    //if not ready, show loading
     if (!isReady) {
         return <ActivityIndicator/>//keeps loading
     }

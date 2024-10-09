@@ -5,7 +5,7 @@ import AuthProvider from "../providers/AuthProvider";
 
 //define global providers
 //we render the authProvider here
-
+//gesturehandler: provides a root environment for gesture handling. 
 export default function App() {
     return <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>

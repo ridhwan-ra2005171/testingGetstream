@@ -23,6 +23,7 @@ export default function RootLayout() {
         <ChatProvider>
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="channel" options={{ headerShown: false }} />
             </Stack>
         </ChatProvider>
     );
