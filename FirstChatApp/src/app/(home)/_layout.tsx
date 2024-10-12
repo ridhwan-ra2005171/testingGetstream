@@ -19,7 +19,7 @@ export default function RootLayout() {
     }
 
     return (
-
+        //display list of chats
         <ChatProvider>
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
